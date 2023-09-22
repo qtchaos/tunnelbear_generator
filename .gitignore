@@ -2,3 +2,4 @@ credentials
 tmp
 venv
 .idea
+__pycache__

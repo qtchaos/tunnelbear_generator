@@ -1,6 +1,7 @@
 import asyncio
 
 import pyppeteer as pyppeteer
+import argparse
 from faker import Faker
 from pymailtm.pymailtm import Account
 
@@ -24,9 +25,16 @@ args = [
     'sec-fetch-user: ?1',
     'upgrade-insecure-requests: 1',
     'user-agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"',
-
 ]
+
 faker = Faker()
+loops = 0
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-l', '--loop', required=False, action='store_true',
+                    help='Automatically create new accounts in an infinite loop.')
+
+console_args = parser.parse_args()
 
 
 async def register():
@@ -58,8 +66,13 @@ async def register():
     await browser.close()
     await save_credentials(Account, AccountEncoder)
     p_print("Verified account successfully!", Colours.OKGREEN)
-    p_print(f"Email: {Account.email}\nPassword: {Account.password}", Colours.OKCYAN)
+    p_print(
+        f"Email: {Account.email}\nPassword: {Account.password}", Colours.OKCYAN)
 
+    if console_args.loop:
+        p_print(f"Looping... {'' if loops == 0 else loops}")
+        loops += 1
+        await register()
 
 if __name__ == "__main__":
     clear_console()

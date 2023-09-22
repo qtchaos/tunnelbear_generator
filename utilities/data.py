@@ -11,9 +11,6 @@ class Account:
     id: str
 
 
-account = Account("test", "test", "test", "test")
-
-
 class AccountEncoder(json.JSONEncoder):
     def default(self, object):
         return {"email": object.email, "email_password": object.email_password, "password": object.password}
